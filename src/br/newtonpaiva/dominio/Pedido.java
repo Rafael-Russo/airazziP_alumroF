@@ -48,6 +48,10 @@ public class Pedido {
         return precoTotal;
     }
 
+    public void setIdPedido(Integer idPedido) {
+        this.idPedido = idPedido;
+    }
+
     public Integer getIdPedido() {
         return idPedido;
     }

@@ -12,6 +12,10 @@ public class Ingredient {
         return idIngrediente;
     }
 
+    public void setIdIngrediente(Integer idIngrediente) {
+        this.idIngrediente = idIngrediente;
+    }
+
     public Ingredient(Integer idIngrediente, String name) {
         this.idIngrediente = idIngrediente;
         this.name = name;

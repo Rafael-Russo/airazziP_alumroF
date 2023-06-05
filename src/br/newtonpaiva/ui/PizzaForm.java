@@ -14,7 +14,7 @@ public class PizzaForm extends JFrame {
     public PizzaForm() {
         // Configurações da janela
         setTitle("Cadastro de Pizza");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(500, 500));
 
@@ -164,15 +164,5 @@ public class PizzaForm extends JFrame {
         } catch (NumberFormatException e) {
             return 0;
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                PizzaForm pizzaForm = new PizzaForm();
-                pizzaForm.setVisible(true);
-            }
-        });
     }
 }

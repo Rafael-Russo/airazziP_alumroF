@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class PedidoForm {
+public class PedidoForm extends JFrame{
 
     private JFrame frame;
     private JPanel pizzaPanel;
@@ -29,7 +29,7 @@ public class PedidoForm {
 
     public PedidoForm() {
         frame = new JFrame("Pizza Order");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setLayout(new GridLayout(0, 1));
 
         pizzaPanel = new JPanel();
@@ -90,10 +90,6 @@ public class PedidoForm {
                 totalLabel.setText("Total: $" + totalPrice);
             }
         });
-    }
-
-    public static void main(String[] args) {
-        new PedidoForm();
     }
 
     private double getPizzaPrice(String type) {

@@ -24,6 +24,18 @@ public class Cardapio {
         return idPizza;
     }
 
+    public Integer[] getQuantidades() {
+        return quantidades;
+    }
+
+    public void setQuantidades(Integer[] quantidades) {
+        this.quantidades = quantidades;
+    }
+
+    public void setIdPizza(Integer idPizza) {
+        this.idPizza = idPizza;
+    }
+
     public Double getPreco() {
         return preco;
     }

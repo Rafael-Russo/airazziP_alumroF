@@ -1,5 +1,8 @@
 package br.newtonpaiva.ui;
 
+import br.newtonpaiva.dominio.Cliente;
+import br.newtonpaiva.dominio.ConexaoBD;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,10 +17,22 @@ public class ClienteForm extends JFrame {
     private JButton buttonCadastrar;
 
     public ClienteForm() {
+        ConexaoBD conexao = new ConexaoBD();
         setTitle("Cadastro do cliente");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         initComponents();
         setupLayout();
+
+        buttonCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Cliente c = new Cliente();
+                c.setNome(textFieldNome.getText());
+                c.setTelefone(textFieldTelefone.getText());
+                c.setEndereco(textFieldEndereco.getText());
+                conexao.InserirCliente(c);
+            }
+        });
     }
 
     private void initComponents() {
@@ -46,10 +61,5 @@ public class ClienteForm extends JFrame {
         pack();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            ClienteForm form = new ClienteForm();
-            form.setVisible(true);
-        });
-    }
+
 }
