@@ -1,5 +1,7 @@
 package br.newtonpaiva.ui;
 
+import br.newtonpaiva.dominio.Cliente;
+import br.newtonpaiva.dominio.Pedido;
 import javafx.scene.control.Labeled;
 
 import java.awt.*;
@@ -75,19 +77,10 @@ public class PedidoForm extends JFrame{
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: submit order
-
-                double totalPrice = 0.00;
-
-                for (int i = 0; i < pizzaTypeComboBox.getItemCount(); i++) {
-                    String[] pizzaType = ((String) pizzaTypeComboBox.getItemAt(i)).split(",");
-                    for (String type : pizzaType) {
-                        totalPrice += getPizzaPrice(type);
-                    }
-                }
-
-                // Set the total price label
-                totalLabel.setText("Total: $" + totalPrice);
+                Pedido p = new Pedido();
+//                p.setCliente();
+//                c.setTelefone(textFieldTelefone.getText());
+//                c.setEndereco(textFieldEndereco.getText());
             }
         });
     }

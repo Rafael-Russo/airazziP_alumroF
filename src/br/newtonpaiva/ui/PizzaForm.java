@@ -31,27 +31,6 @@ public class PizzaForm extends JFrame {
         namePanel.add(pizzaNameField);
         add(namePanel, BorderLayout.CENTER);
 
-        // Painel para adicionar o arquivo de imagem
-        JPanel imagePanel = new JPanel(new FlowLayout());
-        JLabel imageLabel = new JLabel("Imagem: ");
-        imageField = new JTextField(20);
-        JButton imageButton = new JButton("Selecionar Imagem");
-        imageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showOpenDialog(PizzaForm.this);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    imageField.setText(selectedFile.getAbsolutePath());
-                }
-            }
-        });
-        imagePanel.add(imageLabel);
-        imagePanel.add(imageField);
-        imagePanel.add(imageButton);
-        add(imagePanel, BorderLayout.SOUTH);
-
         // Cria o painel de ingredientes
         ingredientsPanel = new JPanel();
         ingredientsPanel.setLayout(new GridBagLayout());
