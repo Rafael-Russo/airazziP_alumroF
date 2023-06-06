@@ -1,7 +1,11 @@
 package br.newtonpaiva.ui;
 
+import br.newtonpaiva.dominio.ConexaoBD;
+import br.newtonpaiva.dominio.Ingredient;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.*;
 
 public class Menu {
@@ -11,7 +15,7 @@ public class Menu {
     private JPanel buttonsPanel = new JPanel();
     private JButton buttonCadastrarCliente = new JButton("Cadastrar Cliente");
     private JButton buttonCadastrarPizza = new JButton("Cadastrar Pizza");
-    private JButton buttonFazerPedido = new JButton("Fazer PedidoMao");
+    private JButton buttonFazerPedido = new JButton("Fazer Pedido");
 
     public Menu() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

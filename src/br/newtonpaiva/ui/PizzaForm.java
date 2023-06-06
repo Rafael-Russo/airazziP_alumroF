@@ -1,15 +1,20 @@
 package br.newtonpaiva.ui;
 
+import br.newtonpaiva.dominio.Cardapio;
+import br.newtonpaiva.dominio.ConexaoBD;
+import br.newtonpaiva.dominio.Ingredient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 public class PizzaForm extends JFrame {
     private JPanel ingredientsPanel;
     private JTextField pizzaNameField;
-    private JTextField imageField;
+    Cardapio pizza = new Cardapio();
 
     public PizzaForm() {
         // Configurações da janela
@@ -33,54 +38,87 @@ public class PizzaForm extends JFrame {
 
         // Cria o painel de ingredientes
         ingredientsPanel = new JPanel();
-        ingredientsPanel.setLayout(new GridBagLayout());
+        ingredientsPanel.setLayout(new GridLayout(0, 1));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 10, 5, 10); // Espaçamento entre os componentes
 
+        // Adiciona o campo do nome da pizza ao painel de ingredientes
+        JLabel pizzaNameLabel = new JLabel("Nome da Pizza: ");
+        gbc.gridy++;
+        ingredientsPanel.add(pizzaNameLabel, gbc);
+
+        // Adiciona o campo de texto do nome da pizza ao painel de ingredientes
+        pizzaNameField = new JTextField(20);
+        gbc.gridy++;
+        ingredientsPanel.add(pizzaNameField, gbc);
+
         // Painel com barra de rolagem para os ingredientes
         JScrollPane ingredientsScrollPane = new JScrollPane(ingredientsPanel);
         ingredientsScrollPane.setPreferredSize(new Dimension(400, 300));
         add(ingredientsScrollPane, BorderLayout.CENTER);
 
-        // Adiciona ingredientes ao painel (Exemplo com ingredientes estáticos)
-        addIngredient("Queijo", gbc);
-        addIngredient("Tomate", gbc);
-        addIngredient("Presunto", gbc);
-        addIngredient("Mussarela", gbc);
-        // Adicione mais ingredientes, se necessário
+        ConexaoBD conexao = new ConexaoBD();
+        conexao.adicionarIngredientesDoArquivo("..\\airazziP_alumroF\\Files\\Ingredientes");
+        List<Ingredient> ingredientes = conexao.selecionarIngredientes();
+
+        for (Ingredient temp : ingredientes) {
+            addIngredient(temp.getIdIngrediente(), temp.getName(), gbc);
+
+            // Atualize o valor de gbc.gridy
+            gbc.gridy++;
+        }
 
         // Botão de cadastrar
         JButton cadastrarButton = new JButton("Cadastrar");
         cadastrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String pizzaName = pizzaNameField.getText();
-                String imageUrl = imageField.getText();
+                pizza.setNomePizza(pizzaNameField.getText());
 
-                // Processar os ingredientes selecionados
-                StringBuilder selectedIngredients = new StringBuilder();
                 Component[] components = ingredientsPanel.getComponents();
+
+                StringBuilder ingredientText = new StringBuilder();
+
                 for (Component component : components) {
                     if (component instanceof JPanel) {
                         JPanel ingredientPanel = (JPanel) component;
-                        JTextField quantityField = (JTextField) ingredientPanel.getComponent(2);
-                        int quantity = getQuantityFromTextField(quantityField);
-                        if (quantity > 0) {
-                            JLabel nameLabel = (JLabel) ingredientPanel.getComponent(0);
-                            String ingredientName = nameLabel.getText();
-                            selectedIngredients.append(ingredientName).append(" (Quantidade: ").append(quantity).append("), ");
+
+                        // Verifica se o painel tem componentes suficientes
+                        if (ingredientPanel.getComponentCount() >= 3) {
+                            Component component0 = ingredientPanel.getComponent(0);
+                            Component component1 = ingredientPanel.getComponent(1);
+                            Component component4 = ingredientPanel.getComponent(4);
+
+                            if (component0 instanceof JLabel && component1 instanceof JLabel && component4 instanceof JTextField) {
+                                JLabel idLabel = (JLabel) component0;
+                                JLabel nameLabel = (JLabel) component1;
+                                JTextField quantityField = (JTextField) component4;
+
+                                int quantity = getQuantityFromTextField(quantityField);
+                                if (quantity > 0) {
+                                    for (Ingredient ing : ingredientes) {
+                                        if (ing.comparaID(Integer.parseInt(idLabel.getText()))) {
+                                            pizza.addIngrediente(ing);
+                                            pizza.addIngredienteNQnt(ing.getIdIngrediente(), Integer.parseInt(quantityField.getText()));
+                                        }
+                                    }
+                                    String ingredientName = nameLabel.getText();
+                                    ingredientText.append(ingredientName).append(" (Quantidade: ").append(quantity).append("), ");
+                                }
+                            }
                         }
                     }
                 }
-                // Exemplo: exibe uma mensagem com os dados da pizza
+
                 StringBuilder message = new StringBuilder("Dados da Pizza:\n");
-                message.append("- Nome: ").append(pizzaName).append("\n");
-                message.append("- Ingredientes: ").append(selectedIngredients).append("\n");
-                message.append("- Imagem: ").append(imageUrl);
+                message.append("- Nome: ").append(pizza.getNomePizza()).append("\n");
+                message.append("- Ingredientes: ").append(ingredientText).append("\n");
+
                 JOptionPane.showMessageDialog(null, message.toString(), "Dados da Pizza", JOptionPane.INFORMATION_MESSAGE);
+                conexao.InserirCardapio(pizza);
             }
         });
         add(cadastrarButton, BorderLayout.PAGE_END);
@@ -90,12 +128,14 @@ public class PizzaForm extends JFrame {
         setLocationRelativeTo(null); // Centraliza a janela na tela
     }
 
-    private void addIngredient(String ingredientName, GridBagConstraints gbc) {
+    private void addIngredient(Integer IngredientID, String ingredientName, GridBagConstraints gbc) {
         JPanel ingredientPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         ingredientPanel.setPreferredSize(new Dimension(400, 30));
 
         // Label para o nome do ingrediente
+        JLabel idLabel = new JLabel(IngredientID.toString());
         JLabel nameLabel = new JLabel(ingredientName);
+        ingredientPanel.add(idLabel);
         ingredientPanel.add(nameLabel);
 
         // Botões "+" e "-"

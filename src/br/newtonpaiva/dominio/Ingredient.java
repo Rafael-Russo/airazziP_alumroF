@@ -7,6 +7,7 @@ public class Ingredient {
     private Integer idIngrediente;
     private String name;
     private Double preco;
+    public static int count = 0;
 
     public Integer getIdIngrediente() {
         return idIngrediente;
@@ -19,6 +20,14 @@ public class Ingredient {
     public Ingredient(Integer idIngrediente, String name) {
         this.idIngrediente = idIngrediente;
         this.name = name;
+        count++;
+    }
+
+    public Ingredient() {
+        this.idIngrediente = null;
+        this.name = null;
+        this.preco = null;
+        count++;
     }
 
     public void setName(String name) {
@@ -37,6 +46,11 @@ public class Ingredient {
         this.preco = preco;
     }
 
+    public boolean comparaID(Integer o) {
+        if (this.idIngrediente.equals(o)) return true;
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,5 +62,9 @@ public class Ingredient {
     @Override
     public int hashCode() {
         return Objects.hash(idIngrediente);
+    }
+
+    public static int getCountIngredients() {
+        return count;
     }
 }

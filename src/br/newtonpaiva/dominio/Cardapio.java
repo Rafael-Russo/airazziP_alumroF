@@ -9,15 +9,9 @@ public class Cardapio {
     private Integer[] quantidades;
     private ArrayList<Ingredient> ingredientes;
     private Double preco;
-    private String imagem;
 
-    public void addIngredienteNQnt(Ingredient temp, Integer quantidade){
-        quantidades = new Integer[ingredientes.size()];
-        for (Ingredient ing : ingredientes){
-            if (ing.equals(temp.getIdIngrediente())){
-                quantidades[ing.getIdIngrediente()] = quantidade;
-            }
-        }
+    public void addIngredienteNQnt(Integer ingredientID, Integer quantidade){
+        quantidades[ingredientID] = quantidade;
     }
 
     public Integer getIdPizza() {
@@ -32,6 +26,10 @@ public class Cardapio {
         this.quantidades = quantidades;
     }
 
+    public void addIngrediente(Ingredient ingredient){
+        ingredientes.add(ingredient);
+    }
+
     public void setIdPizza(Integer idPizza) {
         this.idPizza = idPizza;
     }
@@ -42,6 +40,9 @@ public class Cardapio {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+        for (Ingredient temp : ingredientes){
+            this.preco += temp.getPreco();
+        }
     }
 
     public String getNomePizza() {
@@ -52,41 +53,34 @@ public class Cardapio {
         this.nomePizza = nomePizza;
     }
 
-    public String getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
-    }
-
     public Cardapio() {
         this.ingredientes = new ArrayList<Ingredient>();
         this.idPizza = null;
-        this.imagem = null;
+        this.nomePizza = null;
+        this.quantidades = new Integer[Ingredient.getCountIngredients()];
+
     }
 
     public Cardapio(Integer idPizza, String nomePizza, ArrayList<Ingredient> ingredientes, String imagem) {
         this.idPizza = idPizza;
         this.nomePizza = nomePizza;
+        this.quantidades = new Integer[Ingredient.getCountIngredients()];
         if(ingredientes!=null){
             this.ingredientes = ingredientes;
         }else {
             this.ingredientes = new ArrayList<Ingredient>();
         }
-        this.imagem = imagem;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cardapio cardapio = (Cardapio) o;
-        return Objects.equals(idPizza, cardapio.idPizza);
+        return Objects.equals(idPizza, cardapio.idPizza) && Objects.equals(nomePizza, cardapio.nomePizza);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idPizza);
+        return Objects.hash(idPizza, nomePizza);
     }
 }

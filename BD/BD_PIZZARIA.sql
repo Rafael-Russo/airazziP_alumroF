@@ -17,7 +17,7 @@ preco_ingrediente DOUBLE (10,10)
 CREATE TABLE Cardapio (
 id_pizza INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 nome_pizza VARCHAR(100),
-preco_pizza DOUBLE (10,10)
+preco_pizza DOUBLE (4,2)
 );
 
 CREATE TABLE Pedido (
@@ -41,18 +41,16 @@ FOREIGN KEY (id_pizza) REFERENCES Cardapio(id_pizza),
 FOREIGN KEY (id_qnt_adicionais) REFERENCES Qnt_Adicionais(id_adicionais)
 );
 
-CREATE TABLE Qnt_Cardapio (
-id_cardapio INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-id_ingrediente_card INT NOT NULL,
-qnt_ingreediente INT NOT NULL,
-
-FOREIGN KEY (id_ingrediente_Card) REFERENCES ingrediente(id_ingrediente)
-);
-
 CREATE TABLE Qnt_Adicionais (
 id_adicionais INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-id_ingredientes INT NOT NULL,
-qnt_adicionais INT NOT NULL,
-
-FOREIGN KEY (id_ingredientes) REFERENCES Ingrediente(id_ingrediente)
+id_ingredientes INT NOT NULL
 );
+
+INSERT INTO Cardapio (nome_pizza, preco_pizza)
+VALUES ('Pizza Margherita', 29.99);
+
+INSERT INTO Cardapio (nome_pizza, preco_pizza)
+VALUES ('Pizza Pepperoni', 34.99);
+
+INSERT INTO Cardapio (nome_pizza, preco_pizza)
+VALUES ('Mminecraft', 31.99);
