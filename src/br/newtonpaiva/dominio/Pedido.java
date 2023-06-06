@@ -7,16 +7,32 @@ public class Pedido {
     private Integer idPedido;
     private Boolean hasBorda;
     private Cliente cliente;
-    private Integer[] qntAdicionais;
     private Integer qntPizzas;
-    private ArrayList<Ingredient> adicionais;
+    private Cardapio pedidoPizza;
+    private Double precoTotal;
+    public ArrayList<Ingredient> adicionais;
 
     public Double calcTotal(){
-        Double precoTotal;
-
         precoTotal = 0.0;
 
+        for (Ingredient tempIng : adicionais){
+            precoTotal += tempIng.getPreco();
+        }
+        precoTotal += pedidoPizza.getPreco();
+
+        if (hasBorda){
+            precoTotal+=5.0;
+        }
+
         return precoTotal;
+    }
+
+    public Double getPrecoTotal() {
+        return precoTotal;
+    }
+
+    public void setPrecoTotal(Double precoTotal) {
+        this.precoTotal = precoTotal;
     }
 
     public void setIdPedido(Integer idPedido) {
@@ -33,6 +49,22 @@ public class Pedido {
 
     public Boolean getHasBorda() {
         return hasBorda;
+    }
+
+    public Cardapio getPedidoPizza() {
+        return pedidoPizza;
+    }
+
+    public void setPedidoPizza(Cardapio pedidoPizza) {
+        this.pedidoPizza = pedidoPizza;
+    }
+
+    public Integer getQntPizzas() {
+        return qntPizzas;
+    }
+
+    public void setQntPizzas(Integer qntPizzas) {
+        this.qntPizzas = qntPizzas;
     }
 
     public void addAdicionais(Ingredient i){

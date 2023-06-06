@@ -14,6 +14,7 @@ import java.util.List;
 public class PizzaForm extends JFrame {
     private JPanel ingredientsPanel;
     private JTextField pizzaNameField;
+    private JTextField pizzaPrecoField;
     Cardapio pizza = new Cardapio();
 
     public PizzaForm() {
@@ -54,6 +55,16 @@ public class PizzaForm extends JFrame {
         pizzaNameField = new JTextField(20);
         gbc.gridy++;
         ingredientsPanel.add(pizzaNameField, gbc);
+
+        // Adiciona o campo do nome da pizza ao painel de ingredientes
+        JLabel pizzaPrecoLabel = new JLabel("Preço: ");
+        gbc.gridy++;
+        ingredientsPanel.add(pizzaPrecoLabel, gbc);
+
+        // Adiciona o campo de texto do nome da pizza ao painel de ingredientes
+        pizzaPrecoField = new JTextField(20);
+        gbc.gridy++;
+        ingredientsPanel.add(pizzaPrecoField, gbc);
 
         // Painel com barra de rolagem para os ingredientes
         JScrollPane ingredientsScrollPane = new JScrollPane(ingredientsPanel);
@@ -116,6 +127,8 @@ public class PizzaForm extends JFrame {
                 StringBuilder message = new StringBuilder("Dados da Pizza:\n");
                 message.append("- Nome: ").append(pizza.getNomePizza()).append("\n");
                 message.append("- Ingredientes: ").append(ingredientText).append("\n");
+
+                pizza.setPreco(Double.parseDouble(pizzaPrecoField.getText()));
 
                 JOptionPane.showMessageDialog(null, message.toString(), "Dados da Pizza", JOptionPane.INFORMATION_MESSAGE);
                 conexao.InserirCardapio(pizza);

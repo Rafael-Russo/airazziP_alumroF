@@ -142,19 +142,19 @@ public class ConexaoBD {
         }
     }
 
-    public Integer InserirQntAdicionais(Ingredient ingredient, Integer qnt){
+    public Integer InserirQntAdicionais(Ingredient ingredient, Pedido pedido){
         Connection conexao = conectar();
         PreparedStatement statement = null;
         ResultSet result = null;
 
-        String query = "INSERT INTO Qnt_Adicionais (id_adicionais, id_ingredientes, qnt_adicionais) VALUES (null, ?, ?)";
+        String query = "INSERT INTO qnt_Adicionais (id_ingrediente, id_pedido) VALUES (?, ?);";
 
         try{
             if (verificarIngredienteExistente(ingredient.getIdIngrediente())){
                 statement = conexao.prepareStatement(query);
 
                 statement.setString(1, ingredient.getIdIngrediente().toString());
-                statement.setString(2, qnt.toString());
+                statement.setString(2, pedido.getIdPedido().toString());
 
                 int linhas = statement.executeUpdate();
 
@@ -170,7 +170,6 @@ public class ConexaoBD {
                 }
             }else {
                 InserirIngrediente(ingredient);
-                InserirQntAdicionais(ingredient, qnt);
             }
 
         }catch (SQLException e){
@@ -302,53 +301,12 @@ public class ConexaoBD {
         }
     }
 
-    public void InserirQntPedido(Cardapio pizza, Integer qnt, Integer id_qnt_adicionais){
+    public Integer InserirPedido(Cliente cliente, Boolean hasBorda, Cardapio pizza, Integer qnt, Double preco){
         Connection conexao = conectar();
         PreparedStatement statement = null;
         ResultSet result = null;
 
-        String query = "INSERT INTO Qnt_Pedido (id_qnt_pedido, id_pizza, qnt_pizza, id_qnt_adicionais) VALUES (null, ?, ?, ?)";
-
-        try{
-            if (verificarPizzaExistente(pizza.getIdPizza())){
-                statement = conexao.prepareStatement(query);
-
-                statement.setString(1, pizza.getIdPizza().toString());
-                statement.setString(2, qnt.toString());
-                statement.setString(3, id_qnt_adicionais.toString());
-
-                int linhas = statement.executeUpdate();
-
-                if (linhas > 0){
-                    System.out.println("Qnt_Pedido inserido!");
-                } else {
-                    System.out.println("Falha ao inserir Qnt_Pedido!");
-                }
-            }else {
-                InserirCardapio(pizza);
-                InserirQntCardapio(pizza, qnt);
-            }
-
-        }catch (SQLException e){
-            System.out.println("Erro ao inserir Qnt_Pedido: " + e.getMessage());
-        } finally {
-            try{
-                if (statement != null){
-                    statement.close();
-                }
-                conexao.close();
-            } catch (SQLException e){
-                System.out.println("Erro ao fechar conexão: " + e.getMessage());
-            }
-        }
-    }
-
-    public void InserirPedido(Cliente cliente,Boolean hasBorda, Integer id_qnt_pedido, Double preco){
-        Connection conexao = conectar();
-        PreparedStatement statement = null;
-        ResultSet result = null;
-
-        String query = "INSERT INTO Pedido (id_pedido, id_cliente, has_borda, id_qnt_pedido, preco_pedido) VALUES (null, ?, ?, ?, ?)";
+        String query = "INSERT INTO Pedido (id_cliente, has_borda, id_pizza, qnt_pizza, preco_pedido) VALUES (?,?,?,?,?);";
 
         try{
             if (verificarClienteExistenteTelefone(cliente.getTelefone())){
@@ -356,13 +314,19 @@ public class ConexaoBD {
 
                 statement.setString(1, cliente.getIdCliente().toString());
                 statement.setString(2, hasBorda.toString());
-                statement.setString(3, id_qnt_pedido.toString());
-                statement.setString(4, preco.toString());
+                statement.setString(3, pizza.getIdPizza().toString());
+                statement.setString(4, qnt.toString());
+                statement.setString(5, preco.toString());
 
                 int linhas = statement.executeUpdate();
 
                 if (linhas > 0){
-                    System.out.println("Pedido inserido!");
+                    result = statement.getGeneratedKeys();
+                    if (result.next()){
+                        int id = result.getInt(1);
+                        System.out.println("Pedido inserido! ID: " + id);
+                        return id;
+                    }
                 } else {
                     System.out.println("Falha ao inserir Pedido!");
                 }
@@ -382,6 +346,7 @@ public class ConexaoBD {
                 System.out.println("Erro ao fechar conexão: " + e.getMessage());
             }
         }
+        return null;
     }
 
     public boolean verificarClienteExistenteTelefone(String telefone) {

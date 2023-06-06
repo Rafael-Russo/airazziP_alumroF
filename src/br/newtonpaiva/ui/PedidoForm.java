@@ -33,11 +33,11 @@ public class PedidoForm extends JFrame{
     private JTextField phoneField;
     private JPanel bordaPanel;
     private JCheckBox bordaCheckbox;
-
     List<Ingredient> adicionais = conexao.selecionarIngredientes();
+    ArrayList<Cardapio> pizzas = conexao.selecionarCardapio();
 
     private void setPizzaTypes(){
-        ArrayList<Cardapio> pizzas = conexao.selecionarCardapio();
+
         pizzaTypes = new String[pizzas.size()];
         for (int i=0; i<pizzas.size(); i++){
             pizzaTypes[i] = pizzas.get(i).getNomePizza();
@@ -146,6 +146,21 @@ public class PedidoForm extends JFrame{
                             }
                         }
                     }
+                }
+                p.setQntPizzas(Integer.parseInt(quantitySpinner.getValue().toString()));
+                System.out.println(Integer.parseInt("quantidade: " + quantitySpinner.getValue().toString()));
+
+                for (Cardapio tempPizza : pizzas){
+                    if (tempPizza.getNomePizza().equals(pizzaTypeComboBox.getSelectedItem())){
+                        p.setPedidoPizza(tempPizza);
+                    }
+                }
+                p.setPrecoTotal(p.calcTotal());
+
+                p.setIdPedido(conexao.InserirPedido(p.getCliente(), p.getHasBorda(), p.getPedidoPizza(), p.getQntPizzas(), p.getPrecoTotal()));
+
+                for (Ingredient temp : p.adicionais){
+                    conexao.InserirQntAdicionais(temp, p);
                 }
             }
         });

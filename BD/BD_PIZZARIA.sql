@@ -11,7 +11,7 @@ endereco_cliente VARCHAR(200)
 CREATE TABLE Ingrediente (
 id_ingrediente INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 nome_ingrediente VARCHAR(100),
-preco_ingrediente DOUBLE (10,10)
+preco_ingrediente DOUBLE (4,2)
 );
 
 CREATE TABLE Cardapio (
@@ -23,27 +23,22 @@ preco_pizza DOUBLE (4,2)
 CREATE TABLE Pedido (
 id_pedido INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 id_cliente INT NOT NULL,
-has_borda BOOL NOT NULL,
-id_qnt_pedido INT NOT NULL,
-preco_pedido DOUBLE(4,2),
-
-FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
-FOREIGN KEY (id_qnt_pedido) REFERENCES Qnt_Pedido(id_qnt_pedido)
-);
-
-CREATE TABLE Qnt_Pedido(
-id_qnt_pedido INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+has_borda BIT DEFAULT 0,
 id_pizza INT NOT NULL,
 qnt_pizza INT NOT NULL,
-id_qnt_adicionais INT,
+preco_pedido DOUBLE(5,2),
 
-FOREIGN KEY (id_pizza) REFERENCES Cardapio(id_pizza),
-FOREIGN KEY (id_qnt_adicionais) REFERENCES Qnt_Adicionais(id_adicionais)
+FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),
+FOREIGN KEY (id_pizza) REFERENCES Cardapio(id_pizza)
 );
 
-CREATE TABLE Qnt_Adicionais (
-id_adicionais INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-id_ingredientes INT NOT NULL
+CREATE TABLE qnt_Adicionais(
+id_qnt_adicionais INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+id_ingrediente INT NOT NULL,
+id_pedido INT NOT NULL,
+
+FOREIGN KEY (id_ingrediente) REFERENCES Ingrediente(id_ingrediente),
+FOREIGN KEY (id_pedido) REFERENCES Pedido(id_pedido)
 );
 
 INSERT INTO Cardapio (nome_pizza, preco_pizza)
@@ -53,4 +48,4 @@ INSERT INTO Cardapio (nome_pizza, preco_pizza)
 VALUES ('Pizza Pepperoni', 34.99);
 
 INSERT INTO Cardapio (nome_pizza, preco_pizza)
-VALUES ('Mminecraft', 31.99);
+VALUES ('Minecraft', 31.99);
